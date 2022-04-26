@@ -442,11 +442,12 @@ module.exports.AmazonSocialLogin = async function AmazonSocialLogin(options = {}
 }
 
 module.exports.FacebookSocialLogin = async function FacebookSocialLogin(options = {}) {
+  const typeOptions = typeof options.typeDelay === 'number' ? {delay: options.typeDelay} : {}
   const typeUsername = async function({page, options} = {}) {
     try {
       const emailSelector = '#email'
       await page.waitForSelector(emailSelector)
-      await page.type(emailSelector, options.username)
+      await page.type(emailSelector, options.username, typeOptions)
     } catch (err) {
       takeScreenshot(page, options)
       throw err
@@ -456,7 +457,7 @@ module.exports.FacebookSocialLogin = async function FacebookSocialLogin(options 
   const typePassword = async function({page, options} = {}) {
     try {
       await page.waitForSelector('input[type="password"]', {visible: true})
-      await page.type('input[type="password"]', options.password)
+      await page.type('input[type="password"]', options.password, typeOptions)
 
       // Submit first form
       await page.click('#loginbutton')
